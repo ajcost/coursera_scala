@@ -2,6 +2,8 @@ package patmat
 
 import common._
 
+import scala.annotation.tailrec
+
 /**
  * Assignment 4: Huffman coding
  *
@@ -22,7 +24,7 @@ object Huffman {
   case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
   case class Leaf(char: Char, weight: Int) extends CodeTree
 
-  
+
     def weight(tree: CodeTree): Int = tree match {
       case Leaf(_, w) => w
       case Fork(l, r, _, w) => weight(l) + weight(r)
@@ -150,7 +152,13 @@ object Huffman {
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-    def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
+    def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
+      def recurDecode(tree: CodeTree, bits: List[Bit]): List[Char] = tree match {
+        case Leaf(c, _) => if (bits.isEmpty) c :: Nil else c :: recurDecode(tree, bits)
+        case Fork(l, r, _, _) => if (bits.head == 1) recurDecode(r, bits.tail) else recurDecode(l, bits.tail)
+      }
+      recurDecode(tree, bits)
+    }
   
   /**
    * A Huffman coding tree for the French language.
@@ -168,7 +176,7 @@ object Huffman {
   /**
    * Write a function that returns the decoded secret
    */
-    def decodedSecret: List[Char] = ???
+    def decodedSecret: List[Char] = decode(frenchCode, secret)
   
 
   // Part 4a: Encoding using Huffman tree
