@@ -28,22 +28,16 @@ object Main {
    * Exercise 2
    */
     def balance(chars: List[Char]): Boolean = {
-      /****
       @tailrec
-      def subBalance(chars: List[Char], i: Int, j: Int, state: Int): Int = {
-        if (i == j) return state
-
-        (chars(i), chars(j)) match {
-          case ('(', ')') => subBalance(chars, i + 1, j - 1, state)
-          case ('(', _) => subBalance(chars, i, j - 1, state + 1)
-          case (_, ')') => subBalance(chars, i + 1, j, state - 1)
-          case (_, _) => subBalance(chars, i + 1, j - 1, state)
-        }
+      def subBalance(chars: List[Char], state: Int): Boolean = (chars, state) match {
+        case (c, 0) if c.isEmpty => true
+        case (c, _) if c.isEmpty => false
+        case ('(' :: cs, s) => subBalance(cs, s + 1)
+        case (')' :: cs, s) => if (s > 0) subBalance(cs, s - 1) else false
+        case (_, s) => balance(chars.tail, s)
       }
 
-      if (subBalance(chars, 0, chars.length - 1, 0) == 0)  true else false
-      ***/
-      false
+      subBalance(chars, 0)
     }
   /**
    * Exercise 3
