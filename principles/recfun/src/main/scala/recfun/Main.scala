@@ -32,9 +32,9 @@ object Main {
       def subBalance(chars: List[Char], state: Int): Boolean = (chars, state) match {
         case (c, 0) if c.isEmpty => true
         case (c, _) if c.isEmpty => false
-        case ('(' :: cs, s) => subBalance(cs, s + 1)
-        case (')' :: cs, s) => if (s > 0) subBalance(cs, s - 1) else false
-        case (_, s) => balance(chars.tail, s)
+        case ('(' :: c, s) => subBalance(c, s + 1)
+        case (')' :: c, s) => if (s > 0) subBalance(c, s - 1) else false
+        case (c, s) => subBalance(c.tail, s)
       }
 
       subBalance(chars, 0)
