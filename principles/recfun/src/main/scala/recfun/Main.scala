@@ -43,21 +43,14 @@ object Main {
    * Exercise 3
    */
     def countChange(money: Int, coins: List[Int]): Int = {
-      def countChangeTotal(money: Int, coins: List[Int], total: Int): Int = {
-        if (total == money) {
-            return 1
+      def countChangeTotal(total: Int, coins: List[Int]): Int = {
+        if (total == money) return 1
+        else if (total > money) return 0
+        else {
+          countChangeTotal(total + coins.head, coins) + countChangeTotal(total, coins.tail)
         }
-        else if (total > money) {
-          return 0
-        }
-
-        var ways = 0
-
-        coins.foreach((i: Int) => ways += countChangeTotal(money, coins, total + i))
-
-        ways
       }
-
-      countChangeTotal(money, coins, 0)
+      if (money == 0) return 0
+      countChangeTotal(0, coins)
     }
   }
